@@ -22,10 +22,8 @@ public class SwaggerConfig {
                         .description("REST API untuk sistem pengajuan cuti karyawan")
                         .version("1.0.0")
                         .contact(new Contact()
-                                .name("Basscode")
-                                .email("dev@basscode.com")))
-                .addSecurityItem(new SecurityRequirement()
-                        .addList(SECURITY_SCHEME_NAME))
+                                .name("M. Shadiq Firmansyah Basiru")
+                                .email("shodiqbasiru@gmail.com")))
                 .components(new Components()
                         .addSecuritySchemes(SECURITY_SCHEME_NAME,
                                 new SecurityScheme()

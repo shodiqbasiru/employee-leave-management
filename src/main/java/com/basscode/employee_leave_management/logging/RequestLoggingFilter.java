@@ -46,8 +46,9 @@ public class RequestLoggingFilter implements Filter {
         String rawRequestBody = extractBody(wrappedReq.getBodyAsString());
 
         AppLogger.STREAM.info(
-                ">>> REQUEST  | id={} | body={}",
-                requestId,
+                ">>> REQUEST  [{}] [{}] = {}",
+                httpReq.getMethod(),
+                httpReq.getRequestURI(),
                 extractBody(BodyMaskingUtil.mask(rawRequestBody))
         );
 
@@ -77,9 +78,10 @@ public class RequestLoggingFilter implements Filter {
             );
 
             AppLogger.STREAM.info(
-                    "<<< RESPONSE | id={} | status={} | body={}",
-                    requestId,
+                    "<<< RESPONSE ({}) [{}] | [{}] = {}",
                     wrappedRes.getStatus(),
+                    httpReq.getMethod(),
+                    httpReq.getRequestURI(),
                     extractBody(BodyMaskingUtil.mask(rawResponseBody))
             );
 
@@ -107,11 +109,8 @@ public class RequestLoggingFilter implements Filter {
     }
 
     private String extractBody(String raw) {
-        if (raw == null || raw.isBlank()) return "-";
-        String compact = raw.replaceAll("\\s+", " ").trim();
-        return compact.length() > MAX_BODY_LENGTH
-                ? compact.substring(0, MAX_BODY_LENGTH) + "...[truncated]"
-                : compact;
+        if (raw == null || raw.isBlank()) return " - ";
+        return raw.replaceAll("\\s+", " ").trim();
     }
 
     private boolean shouldSkip(String uri) {

@@ -6,6 +6,7 @@ import com.basscode.employee_leave_management.dto.response.LeaveResponse;
 import com.basscode.employee_leave_management.entity.User;
 import com.basscode.employee_leave_management.service.LeaveRequestService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/leaves")
 @RequiredArgsConstructor
 @Tag(name = "Leave Management", description = "Pengajuan dan manajemen cuti karyawan")
+@SecurityRequirement(name = "bearerAuth")
 public class LeaveController {
     private final LeaveRequestService service;
 
