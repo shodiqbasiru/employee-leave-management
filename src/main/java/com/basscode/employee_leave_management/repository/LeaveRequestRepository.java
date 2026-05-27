@@ -14,21 +14,16 @@ import java.util.List;
 
 @Repository
 public interface LeaveRequestRepository extends JpaRepository<LeaveRequest, String> {
+
     @Query("""
             SELECT COUNT(lr) > 0
             FROM LeaveRequest lr
-              WHERE lr.user.id = :userId
-                     AND lr.status = :status
-                     AND lr.startDate <= :endDate
-                     AND lr.endDate   >= :startDate
-            
+            WHERE lr.user.id = :userId
+              AND lr.status = :status
+              AND lr.startDate <= :endDate
+              AND lr.endDate >= :startDate
             """)
-    boolean existsOverlappingLeave(
-            @Param("userId") String userId,
-            @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate,
-            @Param("status") LeaveStatus status
-    );
+    boolean existsOverlappingLeave(@Param("userId") String userId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("status") LeaveStatus status);
 
     @Query(value = """
             SELECT COALESCE(SUM(
@@ -39,10 +34,7 @@ public interface LeaveRequestRepository extends JpaRepository<LeaveRequest, Stri
               AND lr.status = 'APPROVED'
               AND EXTRACT(YEAR FROM lr.start_date) = :year
             """, nativeQuery = true)
-    int getTotalApprovedLeaveDays(
-            @Param("userId") String userId,
-            @Param("year") int year
-    );
+    int getTotalApprovedLeaveDays(@Param("userId") String userId, @Param("year") int year);
 
     Page<LeaveRequest> findByUserId(String userId, Pageable pageable);
 
@@ -51,5 +43,4 @@ public interface LeaveRequestRepository extends JpaRepository<LeaveRequest, Stri
     Page<LeaveRequest> findAll(Pageable pageable);
 
     Page<LeaveRequest> findByStatus(LeaveStatus status, Pageable pageable);
-
 }
